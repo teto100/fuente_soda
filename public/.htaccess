@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# Handle API routes
+RewriteCond %{REQUEST_URI} ^/api/
+RewriteRule ^api/(.*)$ ../backend/index.php [L]
+
+# Handle React routes (SPA)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]
