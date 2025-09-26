@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   root: 'frontend',
   build: {
-    outDir: '../public/dist'
+    outDir: '../dist'
   },
   server: {
     port: 3000,
