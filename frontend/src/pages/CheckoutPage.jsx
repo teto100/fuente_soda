@@ -4,6 +4,7 @@ import { ArrowLeft, ShoppingCart, Shield, Award, CreditCard, Smartphone, Wallet,
 import QRCode from 'qrcode'
 import LoadingTransition from '../components/LoadingTransition'
 import SuccessAlert from '../components/SuccessAlert'
+import ValidationAlert from '../components/ValidationAlert'
 
 export default function CheckoutPage() {
   const navigate = useNavigate()
@@ -13,6 +14,7 @@ export default function CheckoutPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [showAllPayments, setShowAllPayments] = useState(true)
+  const [validationAlert, setValidationAlert] = useState({ show: false, message: '' })
   const [cardData, setCardData] = useState({
     number: '',
     expiry: '',
@@ -27,6 +29,8 @@ export default function CheckoutPage() {
     bank: ''
   })
   const [showBankMessage, setShowBankMessage] = useState(false)
+  const [selectedBank, setSelectedBank] = useState('')
+  const [dni, setDni] = useState('12345678')
   const [formData, setFormData] = useState({
     email: 'amendoza@email.com',
     phone: '+51 987 654 321',
@@ -80,7 +84,28 @@ export default function CheckoutPage() {
   const handleSubmit = (e) => {
     e.preventDefault()
     
+    // Validación DNI para transferencia bancaria
+    if (selectedPayment === 'transfer') {
+      if (!dni || dni.length !== 8 || !/^\d{8}$/.test(dni)) {
+        setValidationAlert({ show: true, message: 'Por favor ingresa un DNI válido de 8 dígitos para continuar con la transferencia bancaria.' })
+        return
+      }
+      if (!selectedBank) {
+        setValidationAlert({ show: true, message: 'Selecciona tu banco preferido para procesar la transferencia.' })
+        return
+      }
+    }
+    
     if (selectedPayment === 'wallet' && selectedWallet === 'plin') {
+      setIsLoading(true)
+      setTimeout(() => {
+        setIsLoading(false)
+        setShowSuccess(true)
+        setTimeout(() => {
+          navigate('/')
+        }, 2000)
+      }, 5000)
+    } else if (selectedPayment === 'transfer') {
       setIsLoading(true)
       setTimeout(() => {
         setIsLoading(false)
@@ -104,6 +129,12 @@ export default function CheckoutPage() {
   const handlePaymentSelect = (payment) => {
     setSelectedPayment(payment)
     setShowAllPayments(false)
+    
+    // Reset states for different payment methods
+    if (payment === 'transfer') {
+      setSelectedBank('')
+      setDni('46310476') // Pre-fill DNI
+    }
     
     if (payment === 'card') {
       // Limpiar campos primero
@@ -143,108 +174,38 @@ export default function CheckoutPage() {
               </button>
               <h1 className="text-2xl font-bold text-gray-900">Checkout Seguro</h1>
             </div>
-            <div className="flex items-center space-x-2 text-green-600">
-              <Shield className="w-5 h-5" />
-              <span className="text-sm font-medium">Pago 100% Seguro</span>
+            {/* Zona Segura */}
+            <div className="bg-white rounded-lg shadow-sm p-3 border border-blue-100">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">TZ</span>
+                </div>
+                <div className="text-right">
+                  <h3 className="font-semibold text-gray-900 text-sm">Tienda Zaara</h3>
+                  <div className="flex items-center space-x-3 text-xs">
+                    <div className="flex items-center space-x-1">
+                      <Shield className="w-3 h-3 text-green-500" />
+                      <span className="text-green-600">Pago 100% Seguro</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Award className="w-3 h-3 text-blue-500" />
+                      <span className="text-blue-600">Verificado</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Merchant Info */}
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-6 border border-blue-100">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">TZ</span>
-              </div>
-              <div>
-                <h3 className="font-bold text-gray-900">Tienda Zaara</h3>
-                <p className="text-sm text-gray-600">Comercio verificado • SSL Certificado</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-1">
-                <Shield className="w-4 h-4 text-green-500" />
-                <span className="text-xs text-green-600">Verificado</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Award className="w-4 h-4 text-blue-500" />
-                <span className="text-xs text-blue-600">Confiable</span>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Módulo de Facturación */}
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-6 border border-blue-100">
-          <button 
-            onClick={() => setShowBilling(!showBilling)}
-            className="w-full flex items-center justify-between hover:bg-gray-50 rounded-lg transition-colors"
-          >
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-                <FileText className="w-6 h-6 text-white" />
-              </div>
-              <div className="text-left">
-                <h3 className="font-bold text-gray-900">Facturación</h3>
-                <div className="flex items-center space-x-2">
-                  <p className="text-sm text-gray-600">Datos de facturación y envío</p>
-                  <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${showBilling ? 'rotate-180' : ''}`} />
-                </div>
-              </div>
-            </div>
-          </button>
-          
-          {showBilling && (
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Nombre Completo</label>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Correo</label>
-                  <input
-                    type="email"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Teléfono</label>
-                  <input
-                    type="tel"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Dirección</label>
-                  <input
-                    type="text"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={formData.address}
-                    onChange={(e) => setFormData({...formData, address: e.target.value})}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
 
         <div className={`grid grid-cols-1 xl:grid-cols-3 gap-8 transition-all duration-700 ease-in-out ${selectedPayment && !showAllPayments ? 'transform scale-98' : 'scale-100'}`}>
           
           {/* Payment Methods */}
-          <div className={`transition-all duration-700 ease-in-out transform ${selectedPayment && !showAllPayments ? 'xl:col-span-1 scale-95' : 'xl:col-span-2 scale-100'}`}>
+          <div className={`${selectedPayment && !showAllPayments ? 'xl:col-span-1' : 'xl:col-span-2'}`}>
             <div className={`bg-white shadow-sm p-6 transition-all duration-700 ease-in-out ${selectedPayment && !showAllPayments ? 'rounded-3xl transform -translate-x-2' : 'rounded-lg'}`}>
               {showAllPayments ? (
                 <>
@@ -349,7 +310,9 @@ export default function CheckoutPage() {
           {selectedPayment && !showAllPayments && (
             <div className="xl:col-span-1 animate-in slide-in-from-right-5 duration-700">
               <div id="pagoContainer" className="bg-white rounded-2xl shadow-lg p-6 border border-blue-100">
-                <h3 className="text-lg font-semibold mb-4">Completa tu pago</h3>
+                <h3 className="text-lg font-semibold mb-4">
+                  {selectedPayment === 'transfer' ? 'Transferencia Bancaria' : 'Completa tu pago'}
+                </h3>
                 
                 {selectedPayment === 'upi' && qrCode && (
                   <div className="space-y-4">
@@ -561,89 +524,325 @@ export default function CheckoutPage() {
                   </div>
                 )}
 
-                {(selectedPayment === 'bnpl' || selectedPayment === 'transfer') && (
-                  <div className="text-center py-8">
-                    <p className="text-gray-600">Formulario de pago para {selectedPayment}</p>
+                {selectedPayment === 'transfer' && (
+                  <div className="space-y-4">
+                    <h4 className="font-semibold text-gray-900 text-lg">Selecciona tu banco</h4>
+                
+                    
+                    {/* Instrucciones de pago - Solo aparece cuando se selecciona banco */}
+                    {selectedBank && (
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                        <div className="flex items-start space-x-2">
+                          <div className="bg-blue-600 rounded-full p-1">
+                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                          <div>
+                            <h6 className="font-semibold text-blue-900 mb-1" style={{fontSize: '0.6rem'}}>Instrucciones de pago</h6>
+                            <p className="text-blue-700" style={{fontSize: '0.6rem'}}>
+                              Completa el pago en tu aplicación móvil bancaria. Recibirás los datos de transferencia después de confirmar.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  
+                    <div className="grid grid-cols-1 gap-3 transition-all duration-500">
+                      {/* BCP */}
+                      <button 
+                        onClick={() => setSelectedBank('bcp')}
+                        className={`flex items-center rounded-2xl hover:border-blue-500 hover:bg-blue-50 transition-all duration-500 shadow-md hover:shadow-lg ${
+                          selectedBank === 'bcp' ? 'border-blue-500 bg-blue-50 shadow-lg border-3 p-4 space-x-3' : 
+                          selectedBank && selectedBank !== 'bcp' ? 'border-gray-200 border-2 p-2 space-x-2 scale-90' :
+                          'border-gray-200 border-3 p-4 space-x-3'
+                        }`}
+                      >
+                        <img src="/assets/img/bcp.jpg" alt="BCP" className={`object-contain ${
+                          selectedBank && selectedBank !== 'bcp' ? 'w-8 h-8' : 'w-10 h-10'
+                        }`} />
+                        <div className={`text-left flex-1 ${
+                          selectedBank && selectedBank !== 'bcp' && selectedBank ? 'text-xs' : ''
+                        }`}>
+                          <h5 className={`font-bold text-gray-900 ${
+                            selectedBank && selectedBank !== 'bcp' ? 'text-xs' : 'text-sm'
+                          }`}>BCP</h5>
+                          <p className={`text-gray-600 ${
+                            selectedBank && selectedBank !== 'bcp' ? 'text-xs' : 'text-xs'
+                          }`}>App BCP</p>
+                        </div>
+                        {selectedBank === 'bcp' && <div className="w-3 h-3 bg-blue-500 rounded-full"></div>}
+                      </button>
+                      
+                      {/* Interbank */}
+                      <button 
+                        onClick={() => setSelectedBank('interbank')}
+                        className={`flex items-center rounded-2xl hover:border-blue-500 hover:bg-blue-50 transition-all duration-500 shadow-md hover:shadow-lg ${
+                          selectedBank === 'interbank' ? 'border-blue-500 bg-blue-50 shadow-lg border-3 p-4 space-x-3' : 
+                          selectedBank && selectedBank !== 'interbank' ? 'border-gray-200 border-2 p-2 space-x-2 scale-90' :
+                          'border-gray-200 border-3 p-4 space-x-3'
+                        }`}
+                      >
+                        <img src="/assets/img/ibk.jpg" alt="Interbank" className={`object-contain ${
+                          selectedBank && selectedBank !== 'interbank' ? 'w-8 h-8' : 'w-10 h-10'
+                        }`} />
+                        <div className={`text-left flex-1 ${
+                          selectedBank && selectedBank !== 'interbank' && selectedBank ? 'text-xs' : ''
+                        }`}>
+                          <h5 className={`font-bold text-gray-900 ${
+                            selectedBank && selectedBank !== 'interbank' ? 'text-xs' : 'text-sm'
+                          }`}>Interbank</h5>
+                          <p className={`text-gray-600 ${
+                            selectedBank && selectedBank !== 'interbank' ? 'text-xs' : 'text-xs'
+                          }`}>App Interbank</p>
+                        </div>
+                        {selectedBank === 'interbank' && <div className="w-3 h-3 bg-blue-500 rounded-full"></div>}
+                      </button>
+                      
+                      {/* BBVA */}
+                      <button 
+                        onClick={() => setSelectedBank('bbva')}
+                        className={`flex items-center rounded-2xl hover:border-blue-500 hover:bg-blue-50 transition-all duration-500 shadow-md hover:shadow-lg opacity-75 ${
+                          selectedBank === 'bbva' ? 'border-blue-500 bg-blue-50 shadow-lg border-3 p-4 space-x-3' : 
+                          selectedBank && selectedBank !== 'bbva' ? 'border-gray-200 border-2 p-2 space-x-2 scale-90' :
+                          'border-gray-200 border-3 p-4 space-x-3'
+                        }`}
+                      >
+                        <img src="/assets/img/bbva.png" alt="BBVA" className={`object-contain ${
+                          selectedBank && selectedBank !== 'bbva' ? 'w-8 h-8' : 'w-10 h-10'
+                        }`} />
+                        <div className={`text-left flex-1 ${
+                          selectedBank && selectedBank !== 'bbva' && selectedBank ? 'text-xs' : ''
+                        }`}>
+                          <h5 className={`font-bold text-gray-900 ${
+                            selectedBank && selectedBank !== 'bbva' ? 'text-xs' : 'text-sm'
+                          }`}>BBVA</h5>
+                          <p className={`text-red-600 ${
+                            selectedBank && selectedBank !== 'bbva' ? 'text-xs' : 'text-xs'
+                          }`}>⚠️ Ha presentado problemas la última hora</p>
+                        </div>
+                        {selectedBank === 'bbva' && <div className="w-3 h-3 bg-blue-500 rounded-full"></div>}
+                      </button>
+                      
+                      {/* Scotiabank */}
+                      <button 
+                        onClick={() => setSelectedBank('scotiabank')}
+                        className={`flex items-center rounded-2xl hover:border-blue-500 hover:bg-blue-50 transition-all duration-500 shadow-md hover:shadow-lg ${
+                          selectedBank === 'scotiabank' ? 'border-blue-500 bg-blue-50 shadow-lg border-3 p-4 space-x-3' : 
+                          selectedBank && selectedBank !== 'scotiabank' ? 'border-gray-200 border-2 p-2 space-x-2 scale-90' :
+                          'border-gray-200 border-3 p-4 space-x-3'
+                        }`}
+                      >
+                        <img src="/assets/img/scotia.jpg" alt="Scotiabank" className={`object-contain ${
+                          selectedBank && selectedBank !== 'scotiabank' ? 'w-8 h-8' : 'w-10 h-10'
+                        }`} />
+                        <div className={`text-left flex-1 ${
+                          selectedBank && selectedBank !== 'scotiabank' && selectedBank ? 'text-xs' : ''
+                        }`}>
+                          <h5 className={`font-bold text-gray-900 ${
+                            selectedBank && selectedBank !== 'scotiabank' ? 'text-xs' : 'text-sm'
+                          }`}>Scotiabank</h5>
+                          <p className={`text-gray-600 ${
+                            selectedBank && selectedBank !== 'scotiabank' ? 'text-xs' : 'text-xs'
+                          }`}>Scotia Móvil</p>
+                        </div>
+                        {selectedBank === 'scotiabank' && <div className="w-3 h-3 bg-blue-500 rounded-full"></div>}
+                      </button>
+                    </div>
+                    
+
+                    
+                    {/* DNI y Botón Pagar */}
+                    <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                      <div className="space-y-3">
+                        <div>
+                          <label className="block font-medium mb-1" style={{fontSize: '0.8rem'}}>DNI</label>
+                          <input 
+                            type="text" 
+                            placeholder="12345678" 
+                            value={dni}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/\D/g, '').slice(0, 8)
+                              setDni(value)
+                            }}
+                            className="w-full px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                            style={{fontSize: '0.8rem'}}
+                            maxLength="8"
+                          />
+                        </div>
+                        <button 
+                          onClick={handleSubmit}
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+                        >
+                          Pagar S/ {total.toFixed(2)}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="mt-6">
-                  <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
-                    Pagar S/ {total.toFixed(2)}
-                  </button>
-                </form>
+                {selectedPayment === 'bnpl' && (
+                  <div className="text-center py-8">
+                    <p className="text-gray-600">Formulario de pago para Buy Now Pay Later</p>
+                  </div>
+                )}
+
+                {selectedPayment !== 'transfer' && (
+                  <form onSubmit={handleSubmit} className="mt-6">
+                    <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                      Pagar S/ {total.toFixed(2)}
+                    </button>
+                  </form>
+                )}
               </div>
             </div>
           )}
 
           {/* Order Summary */}
-          <div className={`bg-white shadow-sm p-6 h-fit transition-all duration-700 ease-in-out ${selectedPayment && !showAllPayments ? 'xl:col-span-1 rounded-2xl transform scale-95' : 'xl:col-span-1 rounded-lg scale-100'}`}>
-            <h2 className="text-lg font-semibold mb-4 flex items-center">
-              <ShoppingCart className="w-5 h-5 mr-2" />
-              Resumen del Pedido
-            </h2>
-            
-            <div className="border-b pb-4 mb-4">
-              <div className="flex justify-between items-center">
-                <div>
-                  <h3 className="font-medium">Polo Premium</h3>
-                  <p className="text-gray-600 text-sm">Cantidad: 1</p>
+          <div className="xl:col-span-1">
+            <div className="bg-white shadow-sm p-4 h-fit rounded-lg">
+              <h2 className="text-base font-semibold mb-3 flex items-center">
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                Resumen del Pedido
+              </h2>
+              
+              <div className="border-b pb-3 mb-3">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h3 className="font-medium text-sm">Polo Premium</h3>
+                    <p className="text-gray-600 text-xs">Cantidad: 1</p>
+                  </div>
+                  <span className="font-semibold text-sm">S/ {baseAmount.toFixed(2)}</span>
                 </div>
-                <span className="font-semibold">S/ {baseAmount.toFixed(2)}</span>
+              </div>
+              
+              <div className="space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span>Subtotal</span>
+                  <span>S/ {baseAmount.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Impuesto</span>
+                  <span>S/ {tax.toFixed(2)}</span>
+                </div>
+                
+                {fee > 0 && (
+                  <div className="flex justify-between text-red-600 text-sm">
+                    <span>Comisión (1.5%)</span>
+                    <span>+S/ {fee.toFixed(2)}</span>
+                  </div>
+                )}
+                
+                {discount > 0 && (
+                  <div className="flex justify-between text-green-600 text-sm">
+                    <span>Descuento UPI (1%)</span>
+                    <span>-S/ {discount.toFixed(2)}</span>
+                  </div>
+                )}
+                
+                {loyaltyPoints > 0 && (
+                  <div className="flex justify-between text-blue-600 text-sm">
+                    <span>Puntos Loyalty</span>
+                    <span>+{loyaltyPoints} pts</span>
+                  </div>
+                )}
+                
+                <div className="border-t pt-2 flex justify-between font-bold text-base">
+                  <span>Total</span>
+                  <span>S/ {total.toFixed(2)}</span>
+                </div>
+              </div>
+              
+              <div className="mt-4 p-2 bg-green-50 rounded border border-green-200">
+                <div className="flex items-center text-xs text-green-700">
+                  <Shield className="w-3 h-3 mr-1" />
+                  Pago 100% seguro
+                </div>
               </div>
             </div>
             
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span>Subtotal</span>
-                <span>S/ {baseAmount.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Impuesto</span>
-                <span>S/ {tax.toFixed(2)}</span>
-              </div>
+            {/* Módulo de Facturación */}
+            <div className="bg-white rounded-lg shadow-sm p-3 border border-blue-100 mt-4">
+              <button 
+                onClick={() => setShowBilling(!showBilling)}
+                className="w-full flex items-center justify-between hover:bg-gray-50 rounded transition-colors"
+              >
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-green-600 rounded flex items-center justify-center">
+                    <FileText className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-semibold text-gray-900 text-xs">Facturación</h3>
+                    <div className="flex items-center space-x-1">
+                      <p className="text-xs text-gray-600">Datos de envío</p>
+                      <ChevronDown className={`w-3 h-3 text-gray-500 transition-transform ${showBilling ? 'rotate-180' : ''}`} />
+                    </div>
+                  </div>
+                </div>
+              </button>
               
-              {fee > 0 && (
-                <div className="flex justify-between text-red-600">
-                  <span>Comisión (1.5%)</span>
-                  <span>+S/ {fee.toFixed(2)}</span>
+              {showBilling && (
+                <div className="mt-2 pt-2 border-t border-gray-100">
+                  <div className="space-y-2">
+                    <div>
+                      <label className="block text-xs font-medium mb-1">Nombre</label>
+                      <input
+                        type="text"
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value={formData.name}
+                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium mb-1">Correo</label>
+                      <input
+                        type="email"
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium mb-1">Teléfono</label>
+                      <input
+                        type="tel"
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium mb-1">Dirección</label>
+                      <input
+                        type="text"
+                        className="w-full px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        value={formData.address}
+                        onChange={(e) => setFormData({...formData, address: e.target.value})}
+                      />
+                    </div>
+                  </div>
                 </div>
               )}
-              
-              {discount > 0 && (
-                <div className="flex justify-between text-green-600">
-                  <span>Descuento UPI (1%)</span>
-                  <span>-S/ {discount.toFixed(2)}</span>
-                </div>
-              )}
-              
-              {loyaltyPoints > 0 && (
-                <div className="flex justify-between text-blue-600">
-                  <span>Puntos Loyalty</span>
-                  <span>+{loyaltyPoints} pts</span>
-                </div>
-              )}
-              
-              <div className="border-t pt-2 flex justify-between font-bold text-lg">
-                <span>Total</span>
-                <span>S/ {total.toFixed(2)}</span>
-              </div>
-            </div>
-            
-            <div className="mt-6 p-3 bg-green-50 rounded-lg border border-green-200">
-              <div className="flex items-center text-sm text-green-700">
-                <Shield className="w-4 h-4 mr-2" />
-                Pago 100% seguro y encriptado
-              </div>
             </div>
           </div>
         </div>
       </div>
       <LoadingTransition 
         isVisible={isLoading} 
-        message={selectedPayment === 'wallet' && selectedWallet === 'plin' ? `Sigue los pasos de tu aplicativo... Esperando la respuesta de Plin ${walletData.bank}` : "Procesando pago..."} 
+        message={
+          selectedPayment === 'wallet' && selectedWallet === 'plin' 
+            ? `Sigue los pasos de tu aplicativo... Esperando la respuesta de Plin ${walletData.bank}` 
+            : selectedPayment === 'transfer'
+            ? `Sigue los pasos de tu aplicativo bancario... Procesando transferencia`
+            : "Procesando pago..."
+        } 
       />
       <SuccessAlert isVisible={showSuccess} total={total} onClose={() => setShowSuccess(false)} />
+      <ValidationAlert 
+        isVisible={validationAlert.show} 
+        message={validationAlert.message} 
+        onClose={() => setValidationAlert({ show: false, message: '' })} 
+      />
     </div>
   )
 }
