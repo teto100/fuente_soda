@@ -1,18 +1,19 @@
-# MOCKUP DE UNA PASARELA DE PAGO MODERNA
+# PASARELA DE PAGO MODERNA
 
 ## 📋 Descripción General del Proyecto
 
 **Nombre:** Pasarela de pago moderna  
 **Tipo:** Aplicación web con React + PHP
-**Objetivo:** Crear un mockup funcional de una pasarela de pagos con navegación completa pero sin backend real
+**Objetivo:** Mockup funcional de una pasarela de pagos con navegación completa
+**Powered by:** Antonio's Crew
 
 ## 🎯 Propósito y Alcance
 
-### **Problemática a Resolver:**
-- Crear una pasarela de pagos navegable y funcional (UI/UX completo)
+### **Características Principales:**
+- Pasarela de pagos navegable y funcional (UI/UX completo)
 - Sin base de datos ni APIs reales (todo simulado)
-- Utilizar React para frontend moderno y PHP para APIs mock
-- Inspiración basada en Razorpay (carpeta inspire/rz/)
+- React para frontend moderno y PHP para APIs mock
+- Diseño responsive y profesional
 
 ## 🚀 Estructura del Proyecto
 
@@ -27,8 +28,7 @@ upi/
 │   ├── controllers/   # Controladores
 │   └── models/        # Modelos de datos
 ├── public/            # Assets estáticos
-├── data/mock/         # Datos de prueba
-└── inspire/           # Referencias de diseño
+└── data/mock/         # Datos de prueba
 ```
 
 ## 🛠️ Instalación y Configuración
@@ -57,14 +57,13 @@ npm run build        # Build React app
 - [x] Página principal con producto demo
 - [x] Proceso de checkout completo
 - [x] Múltiples métodos de pago simulados
+- [x] Transferencia bancaria con validación DNI
+- [x] UPI con códigos QR dinámicos
+- [x] Billeteras digitales (Yape, Plin)
+- [x] Tarjetas de crédito/débito
 - [x] APIs mock con respuestas realistas
-- [x] Diseño responsive
-
-### 🔄 En desarrollo
-- [ ] Página de pagos con formularios
-- [ ] Página de confirmación
-- [ ] Dashboard de transacciones
-- [ ] Más métodos de pago
+- [x] Diseño responsive y animaciones fluidas
+- [x] Validaciones y alertas personalizadas
 
 ## 🎯 Métodos de Pago Simulados
 
@@ -86,6 +85,10 @@ El proyecto usa Vite para desarrollo rápido y hot-reload. Las APIs PHP se ejecu
 **URLs de desarrollo:**
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8000/api
+
+## 👥 Créditos
+
+**Powered by Antonio's Crew**
 
 ## 📄 Licencia
 
