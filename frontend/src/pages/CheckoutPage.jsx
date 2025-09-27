@@ -72,7 +72,7 @@ export default function CheckoutPage() {
   }
 
   useEffect(() => {
-    if (selectedPayment === 'upi') {
+    if (selectedPayment === 'upi' || selectedPayment === 'wallet') {
       generateQR()
     }
   }, [selectedPayment, total])
@@ -428,6 +428,30 @@ export default function CheckoutPage() {
 
                 {selectedPayment === 'wallet' && (
                   <div className="space-y-4">
+                    {/* QR Code para Billeteras - Siempre visible */}
+                    {qrCode && (
+                      <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-4 border border-purple-200">
+                        <div className="flex flex-col items-center">
+                          <div className="relative bg-white p-3 rounded-xl shadow-lg">
+                            <img src={qrCode} alt="QR Code Billetera" className="w-32 h-32" />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="bg-white rounded-full p-1 shadow-md">
+                                <img src="/assets/img/logo_teto.png" alt="Teto Logo" className="w-6 h-6 rounded-full object-contain" />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="mt-2 text-center">
+                            <div className="flex items-center justify-center mb-1 bg-purple-100 rounded-full px-2 py-1">
+                              <Shield className="w-3 h-3 text-purple-600 mr-1" />
+                              <span className="text-xs text-purple-700 font-semibold">Verificado</span>
+                            </div>
+                             <span className="text-xs text-blue-700 font-semibold">Power by Antonio's Crews</span>
+                            <p className="text-sm font-semibold text-purple-600">S/ {total.toFixed(2)}</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
                     {!selectedWallet ? (
                       <div className="space-y-3">
                         <h4 className="font-medium text-gray-900">Selecciona tu billetera</h4>
