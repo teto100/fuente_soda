@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Network, Monitor, Smartphone, Globe, Shield, CreditCard, Database, Hexagon } from 'lucide-react'
 import ReactFlow, { 
-  MiniMap, 
   Controls, 
   Background, 
   useNodesState, 
@@ -750,6 +749,9 @@ export default function ArquitecturaPage() {
   ]
 
   const initialEdges = [
+    // Billeteras conecta directamente a QR Manager (hacia abajo)
+    { id: 'e-wallet-qr', source: 'yape', target: 'qr-manager', sourceHandle: 'bottom', targetHandle: 'left', animated: true, style: { stroke: '#10B981', strokeWidth: 3 }, label: 'Lectura QR' },
+    
     // Yape lee QR de todos los canales (por lado izquierdo)
     { id: 'e1', source: 'yape', target: 'pfs', targetHandle: 'wallet-input', animated: true, style: { stroke: '#10B981' } },
     { id: 'e2', source: 'yape', target: 'ecom', targetHandle: 'wallet-input', animated: true, style: { stroke: '#10B981' } },
@@ -812,10 +814,10 @@ export default function ArquitecturaPage() {
     { id: 'hub-negocios', type: 'custom', position: { x: 1000, y: 350 }, data: { label: 'Hub de\nServicios', icon: Hexagon, color: '#00a8f4', large: true } },
     
     // Proyecto 28
-    { id: 'proyecto-28', type: 'custom', position: { x: 1200, y: 450 }, data: { label: 'Proyecto 28', icon: Database, color: '#00a8f4' } },
+    { id: 'proyecto-28', type: 'custom', position: { x: 1250, y: 450 }, data: { label: 'Proyecto 28', icon: Database, color: '#00a8f4' } },
     
     // MACE
-    { id: 'mace', type: 'custom', position: { x: 1200, y: 350 }, data: { label: 'MACE', icon: Shield, color: '#00a8f4' } },
+    { id: 'mace', type: 'custom', position: { x: 1250, y: 350 }, data: { label: 'MACE', icon: Shield, color: '#00a8f4' } },
     
     // Base de datos
     { id: 'database-qr20', type: 'custom', position: { x: 700, y: 400 }, data: { label: 'Base de datos', icon: Database, color: '#00a8f4', medium: true } },
@@ -1026,7 +1028,6 @@ export default function ArquitecturaPage() {
             fitView
             attributionPosition="top-right"
           >
-            <MiniMap />
             <Controls />
             <Background variant="dots" gap={12} size={1} />
           </ReactFlow>
@@ -1695,7 +1696,6 @@ export default function ArquitecturaPage() {
               fitView
               attributionPosition="top-right"
             >
-              <MiniMap />
               <Controls />
               <Background variant="dots" gap={12} size={1} />
             </ReactFlow>
