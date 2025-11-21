@@ -36,7 +36,7 @@ export default function OnboardingSuccessPage() {
               <h1 className="text-2xl font-bold text-primary">Onboarding Completado</h1>
             </div>
             <button 
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/home')}
               className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors text-sm font-medium"
             >
               ← Centro de Mockups
@@ -146,7 +146,7 @@ export default function OnboardingSuccessPage() {
             Ver Dashboard
           </button>
           <button 
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/home')}
             className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-colors"
           >
             Explorar Otros Mockups

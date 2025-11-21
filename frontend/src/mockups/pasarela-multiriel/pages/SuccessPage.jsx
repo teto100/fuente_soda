@@ -19,7 +19,7 @@ export default function SuccessPage() {
             Nueva Compra
           </button>
           <button 
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/home')}
             className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-colors"
           >
             ← Centro de Mockups

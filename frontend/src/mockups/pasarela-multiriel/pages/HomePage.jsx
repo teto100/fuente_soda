@@ -24,7 +24,7 @@ export default function HomePage() {
             <h1 className="text-2xl font-bold text-primary">Tienda Zaara</h1>
             <div className="flex items-center space-x-4">
               <button 
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/home')}
                 className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors text-sm font-medium"
               >
                 ← Centro de Mockups

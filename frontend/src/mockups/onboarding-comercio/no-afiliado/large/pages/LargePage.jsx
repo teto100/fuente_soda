@@ -50,7 +50,7 @@ export default function LargePage() {
               Tu empresa ha sido registrada exitosamente. Ya puedes comenzar a recibir pagos.
             </p>
             <button 
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/home')}
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors"
             >
               Ir al Centro de Mockups

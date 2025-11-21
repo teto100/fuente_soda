@@ -930,7 +930,7 @@ export default function ArquitecturaPage() {
               </div>
             </div>
             <button 
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/home')}
               className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors text-sm font-medium"
             >
               ← Centro de Mockups

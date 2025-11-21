@@ -1,5 +1,7 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import LoginPage from './pages/LoginPage'
 import MainPage from './pages/MainPage'
+import ProtectedRoute from './components/ProtectedRoute'
 
 // Pasarela Multiriel
 import PasarelaHomePage from './mockups/pasarela-multiriel/pages/HomePage'
@@ -46,31 +48,33 @@ function App() {
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <div className="min-h-screen bg-gray-50">
         <Routes>
-          <Route path="/" element={<MainPage />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/home" element={<ProtectedRoute><MainPage /></ProtectedRoute>} />
           
           {/* Pasarela Multiriel */}
-          <Route path="/pasarela-multiriel" element={<PasarelaHomePage />} />
-          <Route path="/pasarela-multiriel/checkout" element={<PasarelaCheckoutPage />} />
-          <Route path="/pasarela-multiriel/success" element={<PasarelaSuccessPage />} />
+          <Route path="/pasarela-multiriel" element={<ProtectedRoute><PasarelaHomePage /></ProtectedRoute>} />
+          <Route path="/pasarela-multiriel/checkout" element={<ProtectedRoute><PasarelaCheckoutPage /></ProtectedRoute>} />
+          <Route path="/pasarela-multiriel/success" element={<ProtectedRoute><PasarelaSuccessPage /></ProtectedRoute>} />
           
           {/* Pagos P2M */}
-          <Route path="/pagos-p2m" element={<PagosP2MHomePage />} />
+          <Route path="/pagos-p2m" element={<ProtectedRoute><PagosP2MHomePage /></ProtectedRoute>} />
           
           {/* PSP Adquirente */}
-          <Route path="/psp-adquirente" element={<PSPAdquirentePage />} />
+          <Route path="/psp-adquirente" element={<ProtectedRoute><PSPAdquirentePage /></ProtectedRoute>} />
           
           {/* Integración SDK */}
-          <Route path="/integracion-sdk" element={<IntegracionSDKHomePage />} />
-          <Route path="/integracion-sdk/onboarding" element={<OnboardingPage />} />
+          <Route path="/integracion-sdk" element={<ProtectedRoute><IntegracionSDKHomePage /></ProtectedRoute>} />
+          <Route path="/integracion-sdk/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
           
           {/* PSP Adquirente TPAP */}
-          <Route path="/psp-adquirente-tpap" element={<PSPAdquirenteTpapPage />} />
+          <Route path="/psp-adquirente-tpap" element={<ProtectedRoute><PSPAdquirenteTpapPage /></ProtectedRoute>} />
           
           {/* PSP Tecnológico */}
-          <Route path="/psp-tecnologico" element={<PSPTecnologicoPage />} />
+          <Route path="/psp-tecnologico" element={<ProtectedRoute><PSPTecnologicoPage /></ProtectedRoute>} />
           
           {/* Onboarding Comercio */}
-          <Route path="/onboarding-comercio" element={<OnboardingTypePage />} />
+          <Route path="/onboarding-comercio" element={<ProtectedRoute><OnboardingTypePage /></ProtectedRoute>} />
           <Route path="/onboarding-comercio/afiliado" element={<AfiliadoDashboardPage />} />
           <Route path="/onboarding-comercio/afiliado/upi-setup" element={<UpiSetupPage />} />
           <Route path="/onboarding-comercio/no-afiliado" element={<NoAfiliadoSegmentSelectionPage />} />
@@ -85,12 +89,12 @@ function App() {
           <Route path="/onboarding-comercio/no-afiliado/micro/success" element={<OnboardingComercioSuccessPage />} />
           
           {/* Consentimiento Usuarios */}
-          <Route path="/consentimiento-usuarios/home" element={<YapeHomePage />} />
+          <Route path="/consentimiento-usuarios/home" element={<ProtectedRoute><YapeHomePage /></ProtectedRoute>} />
           <Route path="/consentimiento-usuarios/crear-vpa" element={<CrearVPAPage />} />
           <Route path="/consentimiento-usuarios/asociar-cuenta" element={<AsociarCuentaPage />} />
           
           {/* Arquitectura */}
-          <Route path="/arquitectura" element={<ArquitecturaPage />} />
+          <Route path="/arquitectura" element={<ProtectedRoute><ArquitecturaPage /></ProtectedRoute>} />
           
           {/* Rutas legacy para compatibilidad */}
           <Route path="/checkout" element={<PasarelaCheckoutPage />} />
