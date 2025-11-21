@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { CreditCard, Smartphone, RefreshCw, DollarSign, FileText, Calendar, Store, Code, Settings, Layers, Users, GitBranch, Server, Shield, UserCheck, Network } from 'lucide-react'
+import Header from '../components/Header'
 import '../styles/mainpage-colors.css'
 
 export default function MainPage() {
@@ -160,21 +161,7 @@ export default function MainPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-amber-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <div className="w-20 h-20 bg-white rounded-xl flex items-center justify-center mr-6 shadow-md">
-                <img src="/assets/img/logo_teto.png" alt="Teto Logo" className="w-18 h-18 object-contain" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">BCRP UPI</h1>
-                <p className="text-gray-600">Demostraciones de flujo</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

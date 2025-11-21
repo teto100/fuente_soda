@@ -1,8 +1,9 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { useNavigate } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { useAuth } from '../components/ProtectedRoute';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -12,8 +13,23 @@ export default function LoginPage() {
   const [captchaValue, setCaptchaValue] = useState(null);
   const recaptchaRef = useRef(null);
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
 
   const isCaptchaEnabled = import.meta.env.VITE_ENABLE_RECAPTCHA === 'true';
+
+  useEffect(() => {
+    if (user && !authLoading) {
+      navigate('/home', { replace: true });
+    }
+  }, [user, authLoading, navigate]);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -42,8 +58,11 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            <img src="/assets/img/logo_teto.png" alt="Logo" className="w-24 h-24 object-contain" />
+          </div>
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Bienvenido</h1>
-          <p className="text-gray-600">Pasarela de Pago Moderna</p>
+          <p className="text-gray-600">Antonio's Crew</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
