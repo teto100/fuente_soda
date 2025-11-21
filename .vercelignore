@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Git
+.git/
+.gitignore
+
+# Docs
+*.md
+!README.md
+
+# Backend (si no lo usas en Vercel)
+backend/
+
+# Archivos de desarrollo
+.env.local
+.env.development

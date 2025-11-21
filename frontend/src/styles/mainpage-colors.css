@@ -1,0 +1,21 @@
+/* MainPage specific color palette - Personal branding */
+:root {
+  --main-primary: #39424B;     /* Indigo */
+  --main-secondary: #45E2EA;   /* Dark gray */
+  --main-accent: #62D746;      /* Amber */
+  --main-success: #62D746;     /* Emerald */
+  --main-background: #f8fafc;  /* Light gray */
+  --main-card: #F9F8F9;        /* White */
+}
+
+.main-primary { background-color: var(--main-primary); }
+.main-secondary { background-color: var(--main-secondary); }
+.main-accent { background-color: var(--main-accent); }
+.main-success { background-color: var(--main-success); }
+
+.text-main-primary { color: var(--main-primary); }
+.text-main-secondary { color: var(--main-secondary); }
+.text-main-accent { color: var(--main-accent); }
+
+.border-main-primary { border-color: var(--main-primary); }
+.bg-main-gradient { background: linear-gradient(135deg, var(--main-primary), var(--main-accent)); }

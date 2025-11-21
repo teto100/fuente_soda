@@ -1,0 +1,19 @@
+flowchart TD
+    A[App Yape|smartphone|#BCE8F8|Pagador|60|60]
+    B[PSP Yape|creditcard|#C0E6F0|Pagador|60|200]
+    C[UPI Switch|building|#D0D8F8|Red|320|300]
+    E[Banco Yape|building|#D7F6D4|Emisor|60|400]
+    F[Banco Revolut|building|#D7F6D4|Receptor|580|400]
+    G[App Revolut|smartphone|#F8E8BC|Beneficiario|580|60]
+    H[PSP Niubiz|shield|#F8E8BC|Beneficiario|580|200]
+
+    A -->|1 Inicia UPI|3000| B
+    B -->|2 Petición a NPCI|3500| C
+    C -->|3 A Banco Emisor|3000| E
+    E -->|4 Debita y Confirma|2500| C
+    C -->|5 A Banco Receptor|3000| F
+    F -->|6 Abona y Confirma|2500| C
+    C -->|7 Notifica a PSP Pagador|3000| B
+    B -->|8 Notifica a App Pagador|2500| A
+    C -->|9 Notifica a PSP Beneficiario|3000| H
+    H -->|10 Notifica a App Beneficiario|2500| G

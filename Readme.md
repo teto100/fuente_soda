@@ -10,10 +10,11 @@
 ## 🎯 Propósito y Alcance
 
 ### **Características Principales:**
-- Pasarela de pagos navegable y funcional (UI/UX completo)
-- Sin base de datos ni APIs reales (todo simulado)
-- React para frontend moderno y PHP para APIs mock
+- Mockups interactivos de soluciones de pago modernas
+- Simulaciones completas sin base de datos ni APIs reales
+- React + Vite para frontend moderno con Tailwind CSS
 - Diseño responsive y profesional
+- Flujos animados y diagramas interactivos
 
 ## 🚀 Estructura del Proyecto
 
@@ -53,38 +54,84 @@ npm run build        # Build React app
 
 ## 🎨 Funcionalidades
 
-### ✅ Implementadas
-- [x] Página principal con producto demo
-- [x] Proceso de checkout completo
-- [x] Múltiples métodos de pago simulados
-- [x] Transferencia bancaria con validación DNI
-- [x] UPI con códigos QR dinámicos
-- [x] Billeteras digitales (Yape, Plin)
-- [x] Tarjetas de crédito/débito
-- [x] APIs mock con respuestas realistas
-- [x] Diseño responsive y animaciones fluidas
-- [x] Validaciones y alertas personalizadas
+### ✅ Configuraciones
+- [x] **Onboarding Comercio** - Registro completo de comercios (Afiliado/No Afiliado)
+- [x] **Integración SDK** - Documentación y herramientas de desarrollo
 
-## 🎯 Métodos de Pago Simulados
+### ✅ MultiRiel
+- [x] **Pasarela Multiriel** - Checkout con múltiples métodos de pago
+  - Tarjetas de crédito/débito
+  - UPI con códigos QR dinámicos
+  - Billeteras digitales (Yape, Plin)
+  - Transferencia bancaria con validación DNI
+  - Animaciones fluidas y validaciones
 
+### ✅ Casos P2M
+- [x] **App2App** - Pagos persona a comercio
+- [ ] Pagos Recurrentes (Próximamente)
+- [ ] Pago de Planillas (Próximamente)
+- [ ] Pago de Deuda (Próximamente)
+- [ ] Devoluciones (Próximamente)
+
+### ✅ Flujos
+- [x] **PSP Tecnológico** - Flujos P2P directos con SDK
+- [x] **PSP Adquirente** - Flujos P2M con pasarela
+- [x] **PSP Adquirente TPAP** - Flujos P2M con SDK integrado
+- [x] **Consentimiento Usuarios** - Simulación UPI BCR en Yape
+- [x] **Consentimiento Comercios** - Onboarding completo
+
+## 🎯 Características Técnicas
+
+### **Flujos Animados:**
+- Diagramas Mermaid interactivos
+- Controles de reproducción (play/pause/reset)
+- Navegación por pasos
+- Explicaciones detalladas por paso
+
+### **Simulador Móvil:**
+- Formato tablet/phablet para demos
+- Experiencia nativa simulada
+- Barra de estado y navegación realista
+
+### **Métodos de Pago:**
 - **Tarjetas:** Visa, Mastercard, Rupay
 - **UPI:** GPay, PhonePe, Paytm
-- **NetBanking:** Todos los bancos principales
-- **Wallets:** Paytm, Mobikwik, etc.
+- **Bancos:** BCP, IBK, BIM, BBVA, Scotiabank
+- **Billeteras:** Yape, Plin, Paytm
 
-## 📱 Responsive Design
+## 📱 Diseño y UX
 
-- Mobile-first approach
-- Optimizado para todas las pantallas
-- Componentes modulares con Tailwind CSS
+- **Responsive Design** - Mobile-first approach
+- **Simulador Móvil** - Experiencia tablet/phablet
+- **Componentes Modulares** - Tailwind CSS
+- **Animaciones Fluidas** - Transiciones suaves
+- **Paleta Corporativa** - Colores consistentes (#00A8F4, #00092E)
 
 ## 🔧 Configuración de Desarrollo
 
-El proyecto usa Vite para desarrollo rápido y hot-reload. Las APIs PHP se ejecutan en paralelo para simular un backend real.
+El proyecto usa Vite para desarrollo rápido y hot-reload con simulaciones completas.
 
 **URLs de desarrollo:**
 - Frontend: http://localhost:3000
-- Backend API: http://localhost:8000/api
+- Todos los flujos son simulados (sin backend real)
+
+## 🎮 Mockups Disponibles
+
+### **Configuraciones**
+- `/onboarding-comercio` - Registro de comercios
+- `/integracion-sdk` - Documentación SDK
+
+### **MultiRiel**
+- `/pasarela-multiriel` - Pasarela de pagos completa
+
+### **Casos P2M**
+- `/pagos-p2m` - Pagos App2App
+
+### **Flujos**
+- `/psp-tecnologico` - PSP Tecnológico (2 flujos)
+- `/psp-adquirente` - PSP Adquirente Pasarela
+- `/psp-adquirente-tpap` - PSP Adquirente TPAP
+- `/consentimiento-usuarios/home` - Simulación Yape UPI BCR
 
 ## 👥 Créditos
 

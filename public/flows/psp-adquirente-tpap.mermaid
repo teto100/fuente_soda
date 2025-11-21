@@ -1,0 +1,25 @@
+flowchart TD
+    A[App del Comercio Rappi|smartphone|#D7F6D4|Comercio|60|60]
+    B[Pasarela Rappi|building|#F8E8BC|Comercio|320|140]
+    C[PSP Niubiz|shield|#F8E0B2|Comercio|320|300]
+    T[SDK PSP Niubiz|code|#F8E8BC|Comercio|60|200]
+    D[App Yape|smartphone|#BCE8F8|Pagador|60|380]
+    E[PSP Yape|creditcard|#C0E6F0|Pagador|60|520]
+    F[Banco de Yape|building|#C0E6F0|Pagador|190|520]
+    H[UPI Switch|building|#D0D8F8|Red|320|450]
+    G[Cuenta de Liquidación del Comercio|creditcard|#D7F6F4|Liquidación|540|140]
+
+    A -->|1 App Rappi confirma pedido (monto/orden)|3000| B
+    B -->|2 Llama a PSP Niubiz (Registro ID / Solicitud de Intent)|3500| C
+    C -->|3 PSP crea ID y devuelve INTENT (que incluye VPA e ID)|3200| B
+    B -->|4 Envía Intent a la App Rappi|3000| A
+    A -->|5 App usa SDK Niubiz para ejecutar Intent|3800| T
+    T -->|5.1 Lista las billeteras UPI BCR|2800| D
+    D -->|6 Usuario autoriza pago|3000| E
+    E -->|7 Petición a UPI BCR (Incluye ID)|3300| H
+    H -->|8 Instruye Débito|2800| F
+    F -->|9 Confirma Débito|2500| H
+    H -->|10 Confirma éxito de la transacción (Incluye ID)|3000| C
+    C -->|11 PSP Niubiz verifica ID, notifica éxito, y vincula a Orden X|3500| B
+    B -->|12 Registra, concilia y liquida|4000| G
+    B -->|13 Notifica App Rappi|3000| A

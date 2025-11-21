@@ -1,18 +1,100 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import HomePage from './pages/HomePage'
-import CheckoutPage from './pages/CheckoutPage'
-import PaymentPage from './pages/PaymentPage'
-import SuccessPage from './pages/SuccessPage'
+import MainPage from './pages/MainPage'
+
+// Pasarela Multiriel
+import PasarelaHomePage from './mockups/pasarela-multiriel/pages/HomePage'
+import PasarelaCheckoutPage from './mockups/pasarela-multiriel/pages/CheckoutPage'
+import PasarelaSuccessPage from './mockups/pasarela-multiriel/pages/SuccessPage'
+
+// Pagos P2M
+import PagosP2MHomePage from './mockups/pagos-p2m/pages/HomePage'
+
+// PSP Adquirente
+import PSPAdquirentePage from './mockups/psp-adquirente/pages/PSPAdquirentePage'
+
+// Integración SDK
+import IntegracionSDKHomePage from './mockups/integracion-sdk/pages/HomePage'
+import OnboardingPage from './mockups/integracion-sdk/pages/OnboardingPage'
+
+// PSP Adquirente TPAP
+import PSPAdquirenteTpapPage from './mockups/psp-adquirente-tpap/pages/PSPAdquirenteTpapPage'
+
+// PSP Tecnológico
+import PSPTecnologicoPage from './mockups/psp-tecnologico/pages/PSPTecnologicoPage'
+
+// Onboarding Comercio
+import OnboardingTypePage from './mockups/onboarding-comercio/pages/OnboardingTypePage'
+import AfiliadoDashboardPage from './mockups/onboarding-comercio/afiliado/pages/DashboardPage'
+import UpiSetupPage from './mockups/onboarding-comercio/afiliado/pages/UpiSetupPage'
+import NoAfiliadoSegmentSelectionPage from './mockups/onboarding-comercio/no-afiliado/pages/SegmentSelectionPage'
+import LargePage from './mockups/onboarding-comercio/no-afiliado/large/pages/LargePage'
+import MediumOnboardingHomePage from './mockups/onboarding-comercio/no-afiliado/medium/pages/HomePage'
+import SmallPage from './mockups/onboarding-comercio/no-afiliado/small/pages/SmallPage'
+import MicroOnboardingHomePage from './mockups/onboarding-comercio/no-afiliado/micro/pages/HomePage'
+import OnboardingComercioSuccessPage from './mockups/onboarding-comercio/pages/SuccessPage'
+
+// Consentimiento Usuarios
+import YapeHomePage from './mockups/consentimiento-usuarios/pages/YapeHomePage'
+import CrearVPAPage from './mockups/consentimiento-usuarios/pages/CrearVPAPage'
+import AsociarCuentaPage from './mockups/consentimiento-usuarios/pages/AsociarCuentaPage'
+
+// Arquitectura
+import ArquitecturaPage from './pages/ArquitecturaPage'
 
 function App() {
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <div className="min-h-screen bg-gray-50">
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/payment" element={<PaymentPage />} />
-          <Route path="/success" element={<SuccessPage />} />
+          <Route path="/" element={<MainPage />} />
+          
+          {/* Pasarela Multiriel */}
+          <Route path="/pasarela-multiriel" element={<PasarelaHomePage />} />
+          <Route path="/pasarela-multiriel/checkout" element={<PasarelaCheckoutPage />} />
+          <Route path="/pasarela-multiriel/success" element={<PasarelaSuccessPage />} />
+          
+          {/* Pagos P2M */}
+          <Route path="/pagos-p2m" element={<PagosP2MHomePage />} />
+          
+          {/* PSP Adquirente */}
+          <Route path="/psp-adquirente" element={<PSPAdquirentePage />} />
+          
+          {/* Integración SDK */}
+          <Route path="/integracion-sdk" element={<IntegracionSDKHomePage />} />
+          <Route path="/integracion-sdk/onboarding" element={<OnboardingPage />} />
+          
+          {/* PSP Adquirente TPAP */}
+          <Route path="/psp-adquirente-tpap" element={<PSPAdquirenteTpapPage />} />
+          
+          {/* PSP Tecnológico */}
+          <Route path="/psp-tecnologico" element={<PSPTecnologicoPage />} />
+          
+          {/* Onboarding Comercio */}
+          <Route path="/onboarding-comercio" element={<OnboardingTypePage />} />
+          <Route path="/onboarding-comercio/afiliado" element={<AfiliadoDashboardPage />} />
+          <Route path="/onboarding-comercio/afiliado/upi-setup" element={<UpiSetupPage />} />
+          <Route path="/onboarding-comercio/no-afiliado" element={<NoAfiliadoSegmentSelectionPage />} />
+          <Route path="/onboarding-comercio/no-afiliado/large" element={<LargePage />} />
+          <Route path="/onboarding-comercio/no-afiliado/medium" element={<MediumOnboardingHomePage />} />
+          <Route path="/onboarding-comercio/no-afiliado/small" element={<SmallPage />} />
+          <Route path="/onboarding-comercio/no-afiliado/micro" element={<MicroOnboardingHomePage />} />
+          <Route path="/onboarding-comercio/afiliado/success" element={<OnboardingComercioSuccessPage />} />
+          <Route path="/onboarding-comercio/no-afiliado/large/success" element={<OnboardingComercioSuccessPage />} />
+          <Route path="/onboarding-comercio/no-afiliado/medium/success" element={<OnboardingComercioSuccessPage />} />
+          <Route path="/onboarding-comercio/no-afiliado/small/success" element={<OnboardingComercioSuccessPage />} />
+          <Route path="/onboarding-comercio/no-afiliado/micro/success" element={<OnboardingComercioSuccessPage />} />
+          
+          {/* Consentimiento Usuarios */}
+          <Route path="/consentimiento-usuarios/home" element={<YapeHomePage />} />
+          <Route path="/consentimiento-usuarios/crear-vpa" element={<CrearVPAPage />} />
+          <Route path="/consentimiento-usuarios/asociar-cuenta" element={<AsociarCuentaPage />} />
+          
+          {/* Arquitectura */}
+          <Route path="/arquitectura" element={<ArquitecturaPage />} />
+          
+          {/* Rutas legacy para compatibilidad */}
+          <Route path="/checkout" element={<PasarelaCheckoutPage />} />
+          <Route path="/success" element={<PasarelaSuccessPage />} />
         </Routes>
       </div>
     </Router>
