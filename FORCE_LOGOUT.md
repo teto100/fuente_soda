@@ -6,10 +6,25 @@ La aplicación verifica en tiempo real un documento en Firestore llamado `sessio
 
 - **Si el documento NO existe o `forceLogout: false`** → Acceso normal ✅
 - **Si `forceLogout: true`** → Todos los usuarios son deslogueados inmediatamente ❌
+- **Si `minVersion` no coincide** → Fuerza recarga y re-login (incluso versiones viejas) 🔄
 
 ## Pasos para Cerrar Sesión a Todos
 
-### Opción 1: Desde Firebase Console
+### Opción 1: Forzar Re-login (Recomendado para Updates)
+
+1. Ve a **Firestore Database** en Firebase Console
+2. Edita el documento: `sessionControl/global`
+3. Cambia el campo `minVersion` a un nuevo valor:
+   ```
+   minVersion: "1.0.1"  (o cualquier versión diferente)
+   ```
+4. ✅ Todos los usuarios (incluso con versiones viejas) serán deslogueados y forzados a recargar
+5. Actualizarán automáticamente a la última versión
+
+### Opción 2: Logout Instantáneo (Emergencias)
+
+1. Ve a **Firestore Database** en Firebase Console
+2. Edita el documento: `sessionControl/global`
 
 1. Ve a **Firestore Database** en Firebase Console
 2. Crea/edita el documento: `sessionControl/global`

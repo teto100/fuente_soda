@@ -41,15 +41,29 @@ export function useAuth() {
     return () => unsubscribe();
   }, []);
 
-  // Verificar si la sesión fue revocada remotamente
+  // Verificar si la sesión fue revocada remotamente o versión desactualizada
   useEffect(() => {
     if (!user?.email) return;
 
     const unsubscribe = onSnapshot(
       doc(db, 'sessionControl', 'global'),
       (doc) => {
-        if (doc.exists() && doc.data().forceLogout === true) {
-          signOut(auth);
+        if (doc.exists()) {
+          const data = doc.data();
+          
+          // Forzar logout si está activado
+          if (data.forceLogout === true) {
+            signOut(auth);
+            return;
+          }
+          
+          // Verificar versión mínima requerida
+          const APP_VERSION = '1.0.1'; // Actualiza esto en cada deploy importante
+          if (data.minVersion && data.minVersion !== APP_VERSION) {
+            alert('Hay una nueva versión disponible. Por favor, recarga la página.');
+            signOut(auth);
+            window.location.reload();
+          }
         }
       },
       (error) => {
