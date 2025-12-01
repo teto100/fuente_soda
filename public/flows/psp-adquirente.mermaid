@@ -1,0 +1,21 @@
+flowchart TD
+    yape[App Yape|smartphone|#BCE8F8|Cliente|60|60]
+    rappi[Pasarela Rappi|building|#F8E8BC|Comercio|320|140]
+    niubiz[PSP Niubiz|shield|#F8E0B2|Comercio|320|300]
+    psp-yape[PSP Yape|creditcard|#C0E6F0|Pagador|60|380]
+    banco[Banco de Yapero|building|#C0E6F0|Pagador|60|520]
+    npci[NPCI|building|#D0D8F8|Red|190|450]
+    liquidacion[Cuenta Liquidación|creditcard|#D7F6F4|Liquidación|540|140]
+
+    yape -->|Cliente solicita pago|3000| rappi
+    rappi -->|Llama a API del PSP|3500| niubiz
+    niubiz -->|PSP crea y devuelve Txn ID|3200| rappi
+    rappi -->|Pasarela presenta VPA con ID|3000| yape
+    yape -->|App Yape usa VPA para iniciar pago|3800| psp-yape
+    psp-yape -->|Petición de débito (Incluye ID)|3300| npci
+    npci -->|Instruye débito|2800| banco
+    banco -->|Confirma débito|2500| npci
+    npci -->|Confirma éxito (Incluye ID)|3000| niubiz
+    niubiz -->|PSP verifica ID, notifica éxito|3500| rappi
+    rappi -->|Registra, concilia y liquida|4000| liquidacion
+    rappi -->|Notifica al Cliente|3000| yape
