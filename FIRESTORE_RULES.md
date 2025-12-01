@@ -31,6 +31,12 @@ service cloud.firestore {
       allow read: if request.auth != null;
     }
     
+    // Control de sesiones remotas
+    match /sessionControl/{document} {
+      allow read: if request.auth != null;
+      allow write: if false; // Solo desde Firebase Console o Admin SDK
+    }
+    
     match /{document=**} {
       allow read, write: if request.auth != null;
     }

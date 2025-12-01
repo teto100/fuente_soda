@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../config/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useAuth } from '../components/ProtectedRoute';
@@ -55,31 +55,46 @@ export default function LoginPage() {
     );
   }
 
-  const getIPAddress = async () => {
+  const getIPAndLocation = async () => {
     try {
-      const response = await fetch('https://api.ipify.org?format=json');
+      const response = await fetch('https://ipapi.co/json/');
       const data = await response.json();
-      return data.ip;
+      return {
+        ip: data.ip || 'Unknown',
+        city: data.city || null,
+        region: data.region || null,
+        country: data.country_name || null,
+        latitude: data.latitude || null,
+        longitude: data.longitude || null
+      };
     } catch (error) {
-      return 'Unknown';
+      return { ip: 'Unknown', city: null, region: null, country: null, latitude: null, longitude: null };
     }
   };
 
   const logLoginAttempt = async (success, errorMsg = null) => {
     try {
-      const ip = await getIPAddress();
-      const docRef = await addDoc(collection(db, 'loginAttempts'), {
+      const ipData = await getIPAndLocation();
+      const docId = `${email}_${Date.now()}`;
+      
+      await setDoc(doc(db, 'loginAttempts', docId), {
         email,
         success,
-        ip,
+        ip: ipData.ip,
         location: location || null,
+        ipLocation: {
+          city: ipData.city,
+          region: ipData.region,
+          country: ipData.country,
+          latitude: ipData.latitude,
+          longitude: ipData.longitude
+        },
         timestamp: serverTimestamp(),
         error: errorMsg,
         userAgent: navigator.userAgent
       });
-      console.log('✅ Login attempt logged:', docRef.id);
     } catch (error) {
-      console.error('❌ Error logging attempt:', error.code, error.message);
+      console.error('Error logging attempt:', error.code, error.message);
     }
   };
 
